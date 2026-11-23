@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1160" viewBox="0 0 1500 1160">
+<defs>
+ <style>
+  text{font-family:Arial,sans-serif;fill:#202733}.title{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#5c6675}.head{font-size:22px;font-weight:700}.label{font-size:17px}.small{font-size:14px}.tiny{font-size:12px}.pin{font-size:13px;font-weight:700}
+ </style>
+ <marker id="dot" markerWidth="8" markerHeight="8" refX="4" refY="4"><circle cx="4" cy="4" r="3.5" fill="context-stroke"/></marker>
+</defs>
+<rect width="1500" height="1160" fill="#f2f5f8"/>
+<text x="55" y="62" class="title">Cableado: ESP32 de 38 pines + pantalla SPI 1.44”</text>
+<text x="57" y="98" class="sub">Vista superior: antena del ESP32 arriba, USB abajo. Cada línea de color es un cable.</text>
+<!-- cards -->
+<rect x="35" y="135" width="490" height="890" rx="22" fill="#fff" stroke="#d4dce6" stroke-width="2"/>
+<rect x="975" y="135" width="490" height="890" rx="22" fill="#fff" stroke="#d4dce6" stroke-width="2"/>
+<text x="65" y="178" class="head">Tu ESP32 · 38 pines</text>
+<text x="1005" y="178" class="head">Pantalla SPI · 8 contactos</text>
+<!-- board body -->
+<rect x="199" y="245" width="175" height="630" rx="22" fill="#252d35"/>
+<path d="M215 257 Q286 218 358 257" fill="none" stroke="#cbd3da" stroke-width="7"/>
+<rect x="220" y="276" width="132" height="102" rx="8" fill="#c1c8ce" stroke="#7d8790" stroke-width="3"/>
+<text x="235" y="322" font-size="15" font-weight="bold" fill="#35404a">ESP-WROOM</text><text x="271" y="347" font-size="14" fill="#35404a">32</text>
+<rect x="246" y="858" width="80" height="55" rx="8" fill="#b7c0c8" stroke="#717b84" stroke-width="3"/><rect x="260" y="873" width="52" height="25" rx="4" fill="#59636d"/>
+<text x="286" y="940" text-anchor="middle" class="small">USB</text>
+<!-- pin sockets all, 19 each -->
+<g fill="#d4aa55" stroke="#8c6d31" stroke-width="1">
+<circle cx="190" cy="420" r="7"/><circle cx="383" cy="420" r="7"/>
+<circle cx="190" cy="447" r="7"/><circle cx="383" cy="447" r="7"/>
+<circle cx="190" cy="474" r="7"/><circle cx="383" cy="474" r="7"/>
+<circle cx="190" cy="501" r="7"/><circle cx="383" cy="501" r="7"/>
+<circle cx="190" cy="528" r="7"/><circle cx="383" cy="528" r="7"/>
+<circle cx="190" cy="555" r="7"/><circle cx="383" cy="555" r="7"/>
+<circle cx="190" cy="582" r="7"/><circle cx="383" cy="582" r="7"/>
+<circle cx="190" cy="609" r="7"/><circle cx="383" cy="609" r="7"/>
+<circle cx="190" cy="636" r="7"/><circle cx="383" cy="636" r="7"/>
+<circle cx="190" cy="663" r="7"/><circle cx="383" cy="663" r="7"/>
+<circle cx="190" cy="690" r="7"/><circle cx="383" cy="690" r="7"/>
+<circle cx="190" cy="717" r="7"/><circle cx="383" cy="717" r="7"/>
+<circle cx="190" cy="744" r="7"/><circle cx="383" cy="744" r="7"/>
+<circle cx="190" cy="771" r="7"/><circle cx="383" cy="771" r="7"/>
+<circle cx="190" cy="798" r="7"/><circle cx="383" cy="798" r="7"/>
+<circle cx="190" cy="825" r="7"/><circle cx="383" cy="825" r="7"/>
+<circle cx="190" cy="852" r="7"/><circle cx="383" cy="852" r="7"/>
+<circle cx="190" cy="879" r="7"/><circle cx="383" cy="879" r="7"/>
+<circle cx="190" cy="906" r="7"/><circle cx="383" cy="906" r="7"/>
+</g>
+<!-- board labels, compact full pinout -->
+<g class="tiny" text-anchor="end">
+<text x="175" y="424">1 · 3V3</text><text x="175" y="451">2 · EN</text><text x="175" y="478">3 · 36</text><text x="175" y="505">4 · 39</text><text x="175" y="532">5 · 34</text><text x="175" y="559">6 · 35</text><text x="175" y="586">7 · 32</text><text x="175" y="613">8 · 33</text><text x="175" y="640">9 · 25</text><text x="175" y="667">10 · 26</text><text x="175" y="694">11 · 27</text><text x="175" y="721">12 · 14</text><text x="175" y="748">13 · 12</text><text x="175" y="775">14 · GND</text><text x="175" y="802">15 · 13</text><text x="175" y="829">16 · 9</text><text x="175" y="856">17 · 10</text><text x="175" y="883">18 · 11</text><text x="175" y="910">19 · VIN</text>
+</g>
+<g class="tiny">
+<text x="399" y="424">38 · GND</text><text x="399" y="451">37 · 23</text><text x="399" y="478">36 · 22</text><text x="399" y="505">35 · TX0</text><text x="399" y="532">34 · RX0</text><text x="399" y="559">33 · 21</text><text x="399" y="586">32 · GND</text><text x="399" y="613">31 · 19</text><text x="399" y="640">30 · 18</text><text x="399" y="667">29 · 5</text><text x="399" y="694">28 · 17</text><text x="399" y="721">27 · 16</text><text x="399" y="748">26 · 4</text><text x="399" y="775">25 · 0</text><text x="399" y="802">24 · 2</text><text x="399" y="829">23 · 15</text><text x="399" y="856">22 · 8</text><text x="399" y="883">21 · 7</text><text x="399" y="910">20 · 6</text>
+</g>
+<!-- actual colored wires from ESP selected pin pads, route through whitespace to screen pins -->
+<!-- power 3v3 pin 1 branches to VCC and LED -->
+<path d="M190 420 H560 V300 H900 V332 H1120" fill="none" stroke="#e49a19" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M560 300 H930 V528 H1120" fill="none" stroke="#e49a19" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GND pin38 -->
+<path d="M383 420 H620 V355 H900 V360 H1120" fill="none" stroke="#525d69" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GPIO21 pin33 physical right row index 5 -->
+<path d="M383 555 H650 V410 H900 V388 H1120" fill="none" stroke="#8a5bd2" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GPIO4 pin26 right row index12 -->
+<path d="M383 744 H680 V465 H900 V416 H1120" fill="none" stroke="#e45b4f" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GPIO22 pin36 right row index2 -->
+<path d="M383 474 H710 V520 H900 V444 H1120" fill="none" stroke="#d8a515" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GPIO13 pin15 left index14 -->
+<path d="M190 798 H740 V575 H900 V472 H1120" fill="none" stroke="#24a36b" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- GPIO14 pin12 left index11 -->
+<path d="M190 717 H770 V630 H900 V500 H1120" fill="none" stroke="#3286d8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<!-- colored pin highlighting -->
+<g stroke="#fff" stroke-width="2"><circle cx="190" cy="420" r="9" fill="#e49a19"/><circle cx="383" cy="420" r="9" fill="#525d69"/><circle cx="383" cy="555" r="9" fill="#8a5bd2"/><circle cx="383" cy="744" r="9" fill="#e45b4f"/><circle cx="383" cy="474" r="9" fill="#d8a515"/><circle cx="190" cy="798" r="9" fill="#24a36b"/><circle cx="190" cy="717" r="9" fill="#3286d8"/></g>
+<!-- screen module -->
+<rect x="1120" y="260" width="245" height="390" rx="13" fill="#d9433a" stroke="#a92d27" stroke-width="3"/>
+<rect x="1150" y="290" width="185" height="185" fill="#202a34" stroke="#f3beb4" stroke-width="5"/>
+<rect x="1161" y="301" width="163" height="163" fill="#62a9b5"/>
+<path d="M1161 425 Q1205 383 1240 418 T1324 387 V464 H1161Z" fill="#397c90"/>
+<text x="1243" y="515" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">LCD 128 × 128</text>
+<text x="1243" y="542" text-anchor="middle" fill="#ffe5dc" font-size="13">ST7735 · SPI</text>
+<!-- 8 pin pads on module left edge -->
+<g fill="#f2d365" stroke="#947b2a" stroke-width="2"><rect x="1110" y="320" width="20" height="24" rx="5"/><rect x="1110" y="348" width="20" height="24" rx="5"/><rect x="1110" y="376" width="20" height="24" rx="5"/><rect x="1110" y="404" width="20" height="24" rx="5"/><rect x="1110" y="432" width="20" height="24" rx="5"/><rect x="1110" y="460" width="20" height="24" rx="5"/><rect x="1110" y="488" width="20" height="24" rx="5"/><rect x="1110" y="516" width="20" height="24" rx="5"/></g>
+<!-- Labels placed right aligned before module, wire ends at pad -->
+<g class="small" text-anchor="end" font-weight="bold"><text x="1092" y="338">VCC</text><text x="1092" y="366">GND</text><text x="1092" y="394">CS</text><text x="1092" y="422">RESET</text><text x="1092" y="450">A0 / DC</text><text x="1092" y="478">SDA / MOSI</text><text x="1092" y="506">SCK</text><text x="1092" y="534">LED</text></g>
+<!-- route wires precisely to pin contact centers -->
+<!-- overlay final horizontal segments; main routes end at matching pin y centers -->
+<path d="M900 332 H1120" fill="none" stroke="#e49a19" stroke-width="7"/><path d="M900 528 H1120" fill="none" stroke="#e49a19" stroke-width="7"/>
+<path d="M900 360 H1120" fill="none" stroke="#525d69" stroke-width="7"/><path d="M900 388 H1120" fill="none" stroke="#8a5bd2" stroke-width="7"/><path d="M900 416 H1120" fill="none" stroke="#e45b4f" stroke-width="7"/><path d="M900 444 H1120" fill="none" stroke="#d8a515" stroke-width="7"/><path d="M900 472 H1120" fill="none" stroke="#24a36b" stroke-width="7"/><path d="M900 500 H1120" fill="none" stroke="#3286d8" stroke-width="7"/>
+<!-- legend -->
+<rect x="550" y="700" width="395" height="305" rx="18" fill="#fff" stroke="#d4dce6" stroke-width="2"/>
+<text x="580" y="742" class="head">Lista de cables</text>
+<g class="small">
+<circle cx="585" cy="780" r="7" fill="#e49a19"/><text x="605" y="785">3V3 pin 1 → VCC y LED (derivación)</text>
+<circle cx="585" cy="815" r="7" fill="#525d69"/><text x="605" y="820">GND pin 38 → GND</text>
+<circle cx="585" cy="850" r="7" fill="#8a5bd2"/><text x="605" y="855">GPIO21 pin 33 → CS</text>
+<circle cx="585" cy="885" r="7" fill="#e45b4f"/><text x="605" y="890">GPIO4 pin 26 → RESET</text>
+<circle cx="585" cy="920" r="7" fill="#d8a515"/><text x="605" y="925">GPIO22 pin 36 → A0 / DC</text>
+<circle cx="585" cy="955" r="7" fill="#24a36b"/><text x="605" y="960">GPIO13 pin 15 → SDA / MOSI</text>
+<circle cx="585" cy="990" r="7" fill="#3286d8"/><text x="605" y="995">GPIO14 pin 12 → SCK</text>
+</g>
+<!-- footer notes -->
+<rect x="35" y="1045" width="1430" height="82" rx="16" fill="#e7edf4"/>
+<text x="60" y="1078" class="small" font-weight="bold">Importante:</text><text x="155" y="1078" class="small">usa 3V3, nunca 5V en los GPIO. LED externo retirado por ahora; GPIO23 (pin físico 37) queda libre.</text>
+<text x="60" y="1108" class="small">El GND de la pantalla va al pin físico 38. Conectá con la placa desenchufada; luego alimentá por USB.</text>
+</svg>

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="920" viewBox="0 0 1440 920" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitectura del panel web y ESP32</title>
+  <desc id="desc">El navegador usa Next.js en la Mac; Next.js añade un token y manda órdenes por Wi-Fi al ESP32. MicroPython controla el LED GPIO 23. USB se usa para cargar cambios al programa.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11" fill="none" stroke="#64736a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11" fill="none" stroke="#8ca64c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <style>
+      text{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#26332e}.title{font-size:34px;font-weight:650;letter-spacing:-.7px}.subtitle{font-size:16px;fill:#77837b}.kicker{font-size:12px;font-weight:700;letter-spacing:1.5px;fill:#80905e}.head{font-size:21px;font-weight:650}.body{font-size:15px;fill:#657168}.small{font-size:13px;fill:#758078}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;fill:#43523f}.label{font-size:12px;font-weight:700;letter-spacing:1px;fill:#7a867e}.box{fill:#fbfaf7;stroke:#d8ddd5;stroke-width:1.5}.green{fill:#e7edda;stroke:#cbd7b9}.dark{fill:#2a3732;stroke:#2a3732}.line{fill:none;stroke:#64736a;stroke-width:2;marker-end:url(#arrow)}.lineg{fill:none;stroke:#8ca64c;stroke-width:2.5;marker-end:url(#arrowGreen)}.dash{fill:none;stroke:#a8b39c;stroke-width:1.7;stroke-dasharray:7 7;marker-end:url(#arrowGreen)}
+    </style>
+  </defs>
+  <rect width="1440" height="920" rx="28" fill="#f3f2ed"/>
+  <text x="64" y="75" class="kicker">MAPA DEL SISTEMA · ESP32 + MICROPYTHON + NEXT.JS</text>
+  <text x="64" y="122" class="title">De un clic a una acción física</text>
+  <text x="64" y="153" class="subtitle">La Mac presenta y protege la interfaz; el ESP32 ejecuta el control del hardware.</text>
+
+  <!-- Browser -->
+  <rect x="70" y="222" width="310" height="225" rx="20" class="box"/>
+  <rect x="70" y="222" width="310" height="42" rx="20" fill="#e8e9e1"/>
+  <circle cx="96" cy="243" r="5" fill="#c5a66a"/><circle cx="114" cy="243" r="5" fill="#b6c58c"/><circle cx="132" cy="243" r="5" fill="#cbd0c4"/>
+  <text x="96" y="300" class="label">NAVEGADOR EN LA MAC</text>
+  <text x="96" y="335" class="head">Panel Next.js</text>
+  <text x="96" y="365" class="body">localhost:3000</text>
+  <text x="96" y="399" class="small">dashboard.tsx · globals.css</text>
+  <text x="96" y="424" class="small">Botón LED · estado · IP · reinicio</text>
+
+  <!-- Next API -->
+  <rect x="460" y="222" width="345" height="225" rx="20" class="box green"/>
+  <text x="490" y="267" class="label">SERVIDOR LOCAL EN LA MAC</text>
+  <text x="490" y="305" class="head">Puente de API</text>
+  <text x="490" y="337" class="code">route.ts · /api/device</text>
+  <text x="490" y="371" class="body">Lee .env.local y adjunta el token</text>
+  <text x="490" y="398" class="body">No expone la clave al navegador</text>
+  <rect x="490" y="414" width="155" height="23" rx="11" fill="#f3f2ed"/>
+  <text x="502" y="430" class="small">127.0.0.1 · solo Mac</text>
+
+  <!-- Router -->
+  <rect x="885" y="222" width="210" height="225" rx="20" class="box"/>
+  <circle cx="990" cy="290" r="32" fill="#e8ebdf"/>
+  <path d="M971 286a29 29 0 0 1 38 0M978 294a18 18 0 0 1 24 0m-16 8a7 7 0 0 1 8 0m-4 8h.1" fill="none" stroke="#6f8054" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="925" y="353" class="head">Router Wi-Fi</text>
+  <text x="918" y="381" class="body">red local · 2,4 GHz</text>
+  <text x="915" y="414" class="small">sin puertos abiertos a Internet</text>
+
+  <!-- ESP -->
+  <rect x="1170" y="202" width="220" height="265" rx="20" class="box dark"/>
+  <text x="1198" y="243" class="label" fill="#b9c7aa">DISPOSITIVO</text>
+  <text x="1198" y="278" class="head" fill="#f3f2ed">ESP32</text>
+  <text x="1198" y="309" font-size="15" fill="#d0d8cf">MicroPython</text>
+  <rect x="1198" y="331" width="164" height="41" rx="9" fill="#394941"/>
+  <text x="1210" y="357" class="code" fill="#e5f0c6">hello/main.py</text>
+  <text x="1198" y="401" font-size="13" fill="#c3ccc2">API · GPIO · sensores</text>
+  <text x="1198" y="428" font-size="13" fill="#c3ccc2">IP local enviada al panel</text>
+  <text x="1198" y="451" font-size="12" fill="#aeb9ad">wifi_secrets.py en la placa</text>
+
+  <!-- arrows top -->
+  <path d="M380 325H450" class="line"/>
+  <text x="385" y="307" class="small">fetch</text>
+  <path d="M805 325H875" class="lineg"/>
+  <text x="810" y="307" class="small">HTTP + token</text>
+  <path d="M1095 325H1160" class="lineg"/>
+  <text x="1095" y="307" class="small">Wi-Fi</text>
+
+  <!-- API route cards -->
+  <rect x="460" y="510" width="350" height="191" rx="18" class="box"/>
+  <text x="490" y="550" class="label">ÓRDENES QUE YA EXISTEN</text>
+  <text x="490" y="583" class="code">GET  /api/status</text>
+  <text x="650" y="583" class="small">estado · IP · uptime</text>
+  <text x="490" y="615" class="code">POST /api/led</text>
+  <text x="650" y="615" class="small">on: true / false</text>
+  <text x="490" y="647" class="code">POST /api/restart</text>
+  <text x="650" y="647" class="small">reinicia la placa</text>
+  <text x="490" y="679" class="small">El panel consulta estado cada 4 s</text>
+  <path d="M630 447v53" class="line"/>
+  <path d="M805 610h83q30 0 30-30V458" class="dash"/>
+
+  <!-- GPIO output -->
+  <rect x="1020" y="540" width="370" height="161" rx="18" class="box green"/>
+  <text x="1050" y="580" class="label">SALIDA FÍSICA ACTUAL</text>
+  <text x="1050" y="615" class="head">GPIO23 → LED</text>
+  <text x="1050" y="648" class="code">G23 ── 200 Ω ── ánodo LED</text>
+  <text x="1050" y="676" class="code">GND ────────── cátodo LED</text>
+  <path d="M1280 467v63" class="lineg"/>
+
+  <!-- USB workflow -->
+  <rect x="70" y="755" width="1320" height="105" rx="18" class="box"/>
+  <text x="100" y="795" class="label">CUANDO CAMBIÁS EL PROGRAMA DEL ESP32</text>
+  <text x="100" y="831" class="head">Editar hello/main.py</text>
+  <path d="M330 823h87" class="line"/>
+  <text x="445" y="831" class="head">USB + mpremote</text>
+  <path d="M645 823h87" class="line"/>
+  <text x="760" y="831" class="head">Guardar en la placa</text>
+  <path d="M945 823h87" class="line"/>
+  <text x="1060" y="831" class="head">Reiniciar → probar en panel</text>
+  <text x="100" y="851" class="small">Cambios visuales o de estilos en Next.js se recargan solos y no requieren USB.</text>
+</svg>

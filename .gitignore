@@ -1,0 +1,9 @@
+# Credenciales del Wi-Fi y token privado del dispositivo.
+/hello/wifi_secrets.py
+.venv/
+__pycache__/
+*.pyc
+*.bin
+.DS_Store
+.env*
+!.env.example
