@@ -505,11 +505,12 @@ class Display:
         self.rect(6, 75, WIDTH - 12, 1, TEAL)
         self.text57(4, 81, "MAX %d  MIN %d" % (d["max"], d["min"]), self.t_wx)
         self.text57(4, 92, "HUMEDAD %d%%" % d["hum"], self.t_wx)
-        self.text57(4, 103, "VIENTO %d KM/H" % d["wind"], self.t_wx)
+        rain = d["rain"]
+        self.text57(4, 103, "PROB LLUVIA " + ("--" if rain is None else "%d%%" % rain), self.t_wx)
         if w.error:
             self.text57(4, 117, "SIN CONEXION " + d["time"], self.t_wx_warn)
         else:
-            self.text57(4, 117, "OPEN-METEO " + d["time"], self.t_wx_dim)
+            self.text57(4, 117, "ACTUALIZADO " + d["time"], self.t_wx_dim)
 
     def draw(self, view):
         if view == "status":

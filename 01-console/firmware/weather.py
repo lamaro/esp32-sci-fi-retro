@@ -23,8 +23,8 @@ NAME_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .-'"
 # la memoria para abrir HTTPS (ENOMEM). El clima es un dato público.
 URL = ("http://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f"
        "&current=temperature_2m,relative_humidity_2m,apparent_temperature,"
-       "weather_code,wind_speed_10m,is_day"
-       "&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1")
+       "weather_code,is_day"
+       "&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1")
 
 # Códigos WMO -> (tipo de ícono, texto de hasta 21 caracteres)
 def describe(code):
@@ -114,11 +114,12 @@ class Weather:
                 "temp": int(round(now["temperature_2m"])),
                 "feels": int(round(now["apparent_temperature"])),
                 "hum": int(round(now["relative_humidity_2m"])),
-                "wind": int(round(now["wind_speed_10m"])),
                 "code": int(now["weather_code"]),
                 "day": bool(now["is_day"]),
                 "max": int(round(day["temperature_2m_max"][0])),
                 "min": int(round(day["temperature_2m_min"][0])),
+                # probabilidad máxima de precipitación del día (puede faltar)
+                "rain": day["precipitation_probability_max"][0],
                 "time": now["time"][11:16],
             }
             self.error = False
