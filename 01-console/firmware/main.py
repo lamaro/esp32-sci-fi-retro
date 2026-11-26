@@ -9,6 +9,7 @@ import time
 from machine import Pin
 from wifi_secrets import API_TOKEN, WIFI_PASSWORD, WIFI_SSID
 from display_ui import Display, MODES
+from weather import valid_city
 
 LED_PIN = 23
 led = Pin(LED_PIN, Pin.OUT)
@@ -108,7 +109,7 @@ def serve_client(client):
 
     if method == "GET" and path == "/api/status":
         uptime = time.ticks_diff(time.ticks_ms(), started_at) // 1000
-        send_json(client, 200, {"online": True, "led": bool(led.value()), "uptime": uptime, "ip": ip_address, "display": display.mode, "scene": display.current(), "textSupported": True})
+        send_json(client, 200, {"online": True, "led": bool(led.value()), "uptime": uptime, "ip": ip_address, "display": display.mode, "scene": display.current(), "textSupported": True, "weatherCity": display.weather.city["name"]})
         return False
 
     if method == "POST" and path == "/api/display":
@@ -130,6 +131,12 @@ def serve_client(client):
             ):
                 send_json(client, 400, {"error": "invalid_display_text"})
                 return False
+        if mode == "weather" and "city" in command:
+            city = valid_city(command["city"])
+            if city is None:
+                send_json(client, 400, {"error": "invalid_city"})
+                return False
+            display.weather.set_city(city)
         display.set_mode(mode, message)
         # Dibujar la nueva escena antes de confirmar el comando al panel.
         display.update()

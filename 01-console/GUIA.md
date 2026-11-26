@@ -63,11 +63,12 @@ Completá `WIFI_SSID`, `WIFI_PASSWORD` y `API_TOKEN` en `wifi_secrets.py`. Guard
 mpremote connect "$PORT" fs cp wifi_secrets.py :wifi_secrets.py &&
 mpremote connect "$PORT" fs cp font5x7.py :font5x7.py &&
 mpremote connect "$PORT" fs cp display_ui.py :display_ui.py &&
+mpremote connect "$PORT" fs cp weather.py :weather.py &&
 mpremote connect "$PORT" fs cp main.py :main.py &&
 mpremote connect "$PORT" reset
 ```
 
-La IP aparece en el LCD al iniciar. También podés abrir `mpremote connect "$PORT" repl` y presionar **EN** para ver el arranque. Salí con **Ctrl+]** antes de copiar archivos otra vez. Para actualizar el programa, copiá solo `font5x7.py`, `display_ui.py` y `main.py` y reiniciá. Volvé a copiar los secretos si cambian la red o el token.
+La IP aparece en el LCD al iniciar. También podés abrir `mpremote connect "$PORT" repl` y presionar **EN** para ver el arranque. Salí con **Ctrl+]** antes de copiar archivos otra vez. Para actualizar el programa, copiá solo `font5x7.py`, `display_ui.py`, `weather.py` y `main.py` y reiniciá. Volvé a copiar los secretos si cambian la red o el token.
 
 ## Levantar el panel
 
@@ -104,6 +105,6 @@ La carpeta [`case/`](case) tiene el proyecto de Bambu Studio, los STL y el model
 | El panel no abre | Confirmá que `npm run dev` sigue activo y usá la dirección que imprime Next.js. |
 | LCD blanco aunque la API responde | Ejecutá la demo de atardecer por USB. Si sigue blanco, desconectá la alimentación, revisá VCC/GND y los cables SPI por etiqueta y probá otros jumpers. La luz de fondo puede encender aunque el LCD no reciba datos. |
 | Línea de colores en el borde | Usá la cuadrícula para verificar orientación y offsets. Para el módulo probado, con los pines arriba el driver usa MADCTL `0x08`, columnas 2–129 y filas 1–128. Si cambiás la orientación, ajustá `MADCTL`, `X_OFF` y `Y_OFF` en `display_ui.py`. |
-| `MemoryError` o mensaje de firmware anterior | Cargá juntos `font5x7.py`, `display_ui.py` y `main.py`. El driver integrado usa un buffer de 2 KB y dibuja en tiras de ocho filas. Buscá errores de arranque en el REPL. |
+| `MemoryError` o mensaje de firmware anterior | Cargá juntos `font5x7.py`, `display_ui.py`, `weather.py` y `main.py`. El driver integrado usa un buffer de 2 KB y dibuja en tiras de ocho filas. Buscá errores de arranque en el REPL. |
 
 [Referencia de mpremote](https://docs.micropython.org/en/latest/reference/mpremote.html).

@@ -4,6 +4,7 @@ import time
 import math
 import random
 from font5x7 import FONT57
+from weather import Weather, describe
 try:
     from micropython import native     # compila a código nativo las funciones más usadas
 except ImportError:                     # simulador en la computadora
@@ -17,6 +18,7 @@ BLACK, NAVY, BLUE, PURPLE = 0x0000, 0x0843, 0x1190, 0x6012
 PINK, ORANGE, YELLOW, WHITE = 0xF986, 0xFC60, 0xFFE0, 0xFFFF
 TEAL, GREEN, DARK = 0x04F5, 0x2588, 0x10A3
 TERM, TERM_DIM, RED, HAZARD = 0x37E6, 0x0300, 0xF800, 0xFBE0
+GRAY, LIGHT, SLATE, SKY = 0x8410, 0xC618, 0x4208, 0x3D9F
 
 # Orientación del LCD. En la consola la pantalla va con los pines ARRIBA.
 #   0x08 = sin espejar (pines arriba), márgenes de la memoria 2 y 1.
@@ -26,8 +28,8 @@ X_OFF = 2
 Y_OFF = 1
 SPI_BAUD = 20000000
 
-MODES = ("status", "sunset", "colors", "animation", "text", "console", "hacker", "fatal", "random")
-RANDOM_POOL = ("status", "sunset", "colors", "animation", "console", "hacker", "fatal")
+MODES = ("status", "sunset", "colors", "animation", "text", "console", "hacker", "fatal", "weather", "random")
+RANDOM_POOL = ("status", "sunset", "colors", "animation", "console", "hacker", "fatal", "weather")
 RANDOM_MS = 20000
 ANIM_MS = 20            # objetivo: hasta 50 cuadros por segundo
 
@@ -97,6 +99,11 @@ class Display:
         self.t_head = glyph_table(BLACK, TERM)
         self.t_alarm_on = glyph_table(BLACK, RED)
         self.t_alarm_off = glyph_table(HAZARD, BLACK)
+        self.t_wx = glyph_table(WHITE, NAVY)
+        self.t_wx_dim = glyph_table(TEAL, NAVY)
+        self.t_wx_head = glyph_table(NAVY, TEAL)
+        self.t_wx_warn = glyph_table(ORANGE, NAVY)
+        self.weather = Weather()
         self.spi = machine.SPI(1, baudrate=SPI_BAUD, polarity=0, phase=0,
                                sck=machine.Pin(14), mosi=machine.Pin(13), miso=machine.Pin(12))
         self.cs = machine.Pin(21, machine.Pin.OUT, value=1)
@@ -423,6 +430,87 @@ class Display:
         self.circle(int(self.x), int(self.y), 8, YELLOW)
         self.circle(int(self.x-3), int(self.y-4), 2, WHITE)
 
+    # ------------------------------------------------------------ clima
+    def cloud(self, x, y, color):
+        """Nube de unos 34 x 18 px con el borde inferior en y."""
+        self.circle(x + 9, y - 6, 6, color)
+        self.circle(x + 19, y - 10, 9, color)
+        self.circle(x + 28, y - 6, 6, color)
+        self.rect(x + 3, y - 6, 31, 7, color)
+
+    def sun(self, cx, cy, r):
+        for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+            self.rect(cx + dx * (r + 3) - 1, cy + dy * (r + 3) - 1, 3, 3, YELLOW)
+        for dx, dy in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+            self.rect(cx + dx * (r + 1) - 1, cy + dy * (r + 1) - 1, 2, 2, YELLOW)
+        self.circle(cx, cy, r, YELLOW)
+
+    def moon(self, cx, cy, r):
+        self.circle(cx, cy, r, LIGHT)
+        self.circle(cx + r // 2, cy - r // 3, r - 1, NAVY)
+
+    def weather_icon(self, kind, day):
+        cx, cy = 26, 36
+        if kind == "clear":
+            if day:
+                self.sun(cx, cy, 10)
+            else:
+                self.moon(cx, cy, 12)
+            return
+        if kind == "partly":
+            if day:
+                self.sun(cx + 6, cy - 7, 8)
+            else:
+                self.moon(cx + 6, cy - 7, 9)
+            self.cloud(cx - 19, cy + 12, WHITE)
+            return
+        if kind == "fog":
+            for i, w in enumerate((30, 36, 26, 34)):
+                self.rect(cx - w // 2, cy - 10 + i * 7, w, 3, GRAY)
+            return
+        dark = kind in ("rain", "storm")
+        self.cloud(cx - 17, cy + 4, SLATE if kind == "storm" else GRAY if dark else LIGHT)
+        if kind == "rain":
+            for x in (cx - 10, cx - 2, cx + 6, cx + 14):
+                self.rect(x - 2, cy + 8, 2, 4, SKY)
+                self.rect(x - 4, cy + 14, 2, 4, SKY)
+        elif kind == "snow":
+            for x, y in ((cx - 9, cy + 9), (cx + 1, cy + 11), (cx + 11, cy + 9), (cx - 4, cy + 16), (cx + 6, cy + 17)):
+                self.rect(x - 1, y, 3, 1, WHITE)
+                self.rect(x, y - 1, 1, 3, WHITE)
+        elif kind == "storm":
+            for i, (x, y) in enumerate(((3, 6), (1, 9), (-1, 12), (3, 12), (1, 15), (-1, 18))):
+                self.rect(cx + x, cy + y, 4, 3, YELLOW)
+
+    def draw_weather(self):
+        w = self.weather
+        d = w.data
+        self.rect(0, 0, WIDTH, HEIGHT, NAVY)
+        self.rect(0, 0, WIDTH, 11, TEAL)
+        name = w.city["name"][:21]
+        self.text57((WIDTH - len(name) * 6) // 2, 2, name, self.t_wx_head)
+        if d is None:
+            self.cloud(47, 58, GRAY)
+            msg = "SIN CONEXION" if w.error else "CARGANDO..."
+            self.text57((WIDTH - len(msg) * 6) // 2, 72, msg, self.t_wx_warn if w.error else self.t_wx_dim)
+            return
+        kind, label = describe(d["code"])
+        self.weather_icon(kind, d["day"])
+        temp = "%d\u00b0" % d["temp"]
+        scale = 5 if len(temp) <= 3 else 4
+        self.text(124 - len(temp) * 4 * scale + scale, 19, temp, WHITE, scale)
+        feels = "ST %d" % d["feels"]
+        self.text57(122 - len(feels) * 6, 49, feels, self.t_wx_dim)
+        self.text57((WIDTH - len(label) * 6) // 2, 63, label, self.t_wx)
+        self.rect(6, 75, WIDTH - 12, 1, TEAL)
+        self.text57(4, 81, "MAX %d  MIN %d" % (d["max"], d["min"]), self.t_wx)
+        self.text57(4, 92, "HUMEDAD %d%%" % d["hum"], self.t_wx)
+        self.text57(4, 103, "VIENTO %d KM/H" % d["wind"], self.t_wx)
+        if w.error:
+            self.text57(4, 117, "SIN CONEXION " + d["time"], self.t_wx_warn)
+        else:
+            self.text57(4, 117, "OPEN-METEO " + d["time"], self.t_wx_dim)
+
     def draw(self, view):
         if view == "status":
             self.draw_status()
@@ -436,6 +524,8 @@ class Display:
             self.draw_console()
         elif view == "fatal":
             self.draw_fatal()
+        elif view == "weather":
+            self.draw_weather()
         else:
             self.draw_animation()
 
@@ -459,6 +549,13 @@ class Display:
                 if dt < 450:
                     return
                 self.blink = not self.blink
+            elif view == "weather":
+                # Se consulta la API solo con esta escena en pantalla, y después
+                # de dibujar "CARGANDO" para no demorar la respuesta al panel.
+                if not self.weather.due(now):
+                    return
+                self.weather.fetch()
+                now = time.ticks_ms()
             else:
                 return
         strips = set()
@@ -495,5 +592,6 @@ FONT = {
  '7':('111','001','010','010','010'), '9':('111','101','111','001','110'),
  '!':('010','010','010','000','010'), '?':('111','001','010','000','010'),
  '.':('000','000','000','000','010'), ':':('000','010','000','010','000'),
+ '\u00b0':('111','101','111','000','000'),
  ' ':('000','000','000','000','000'), '-':('000','000','111','000','000')
 }

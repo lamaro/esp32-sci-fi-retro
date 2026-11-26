@@ -33,6 +33,7 @@ A small desk console built from an ESP32 DevKit and a 1.44" ST7735S screen. It h
 | `console` | Green terminal that types and scrolls real fragments of the firmware's own Python code |
 | `hacker` | Hacker-movie terminal: commands, progress bars, hex dumps and alerts |
 | `fatal` | Blinking red "FATAL ERROR" alarm with hazard stripes |
+| `weather` | Current weather for a city (default Buenos Aires) from [Open-Meteo](https://open-meteo.com), a free public API with no key. The board only queries it while this scene is on screen, at most every 15 minutes |
 | `sunset` | Pixel-art sunset |
 | `colors` | RGB565 color grid to check colors and edges |
 | `animation` | Bouncing orb with trail and shadow |
@@ -99,6 +100,7 @@ Fill in `WIFI_SSID`, `WIFI_PASSWORD` and `API_TOKEN` in `wifi_secrets.py`, then 
 mpremote connect "$PORT" fs cp wifi_secrets.py :wifi_secrets.py &&
 mpremote connect "$PORT" fs cp font5x7.py :font5x7.py &&
 mpremote connect "$PORT" fs cp display_ui.py :display_ui.py &&
+mpremote connect "$PORT" fs cp weather.py :weather.py &&
 mpremote connect "$PORT" fs cp main.py :main.py &&
 mpremote connect "$PORT" reset
 ```

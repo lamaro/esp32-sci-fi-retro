@@ -14,6 +14,7 @@ Para actualizar la app de la placa:
 ```sh
 mpremote connect "$PORT" fs cp font5x7.py :font5x7.py &&
 mpremote connect "$PORT" fs cp display_ui.py :display_ui.py &&
+mpremote connect "$PORT" fs cp weather.py :weather.py &&
 mpremote connect "$PORT" fs cp main.py :main.py &&
 mpremote connect "$PORT" reset
 ```
