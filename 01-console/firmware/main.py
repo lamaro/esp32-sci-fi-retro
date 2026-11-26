@@ -35,6 +35,7 @@ def connect_wifi():
     while not wlan.isconnected():
         print("No se conectó. Revisá wifi_secrets.py; vuelvo a intentar en 10 s.")
         time.sleep(10)
+        wlan.disconnect()    # sin esto, el reintento falla con "sta is connecting"
         wlan.connect(WIFI_SSID, WIFI_PASSWORD)
         deadline = time.ticks_add(time.ticks_ms(), 25000)
         while not wlan.isconnected() and time.ticks_diff(deadline, time.ticks_ms()) > 0:
