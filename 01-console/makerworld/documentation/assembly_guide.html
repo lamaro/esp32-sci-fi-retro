@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assembly Guide</title>
+<style>
+  @page { size: A4; margin: 16mm 16mm 18mm; }
+  body { font: 10pt/1.45 -apple-system, "Helvetica Neue", Arial, sans-serif; color:#1d1d1b; margin:0; }
+  h1 { font-size: 24pt; margin: 0; letter-spacing: -.01em; }
+  .sub { color:#6b6b66; margin: 2px 0 14px; font-size: 11pt; }
+  .bar { height: 6px; background: repeating-linear-gradient(-45deg, #e8590c 0 10px, #1d1d1b 10px 20px); margin: 0 0 18px; }
+  h2 { font-size: 14pt; margin: 18px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #e8590c; }
+  h3 { font-size: 11pt; margin: 12px 0 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 8px; }
+  th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid #e2e0da; vertical-align: top; }
+  th { font-size: 9pt; text-transform: uppercase; letter-spacing: .06em; color:#6b6b66; }
+  td.n { width: 40px; font-weight: 600; }
+  img { max-width: 100%; display: block; margin: 6px auto; }
+  .page { page-break-before: always; }
+  .note { background: #fff3e8; border-left: 4px solid #e8590c; padding: 6px 10px; margin: 8px 0; }
+  .warn { background: #fdecec; border-left: 4px solid #c92a2a; padding: 6px 10px; margin: 8px 0; }
+  ol.steps { padding-left: 0; list-style: none; counter-reset: s; }
+  ol.steps > li { counter-increment: s; position: relative; padding-left: 34px; margin: 0 0 10px; }
+  ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: #e8590c; color: #fff; font-weight: 700; text-align: center; line-height: 24px; }
+  code { font-family: Menlo, monospace; font-size: 9.5pt; background: #f1f0ec; padding: 0 3px; border-radius: 3px; }
+  .two { display: flex; gap: 12px; } .two > * { flex: 1; }
+  .cap { text-align: center; color: #6b6b66; font-size: 9pt; margin-top: -2px; }
+</style>
+</head>
+<body>
+
+<h1>ESP32 Retro Sci-Fi Case</h1>
+<p class="sub">Assembly guide · ESP32 DevKit 38-pin + 1.44" ST7735S screen</p>
+<div class="bar"></div>
+
+<img src="../covers/cover_4x3_web.png" style="width:44%">
+
+<h2>Bill of materials</h2>
+<table>
+<tr><th>Qty</th><th>Part</th><th>Notes</th></tr>
+<tr><td class="n">1</td><td>ESP32 DevKit, 38 pins (ESP-WROOM-32)</td><td>PCB approx. 28 × 53 mm, holes 24 × 51 mm apart</td></tr>
+<tr><td class="n">1</td><td>ST7735S SPI LCD, 1.44", 128×128</td><td>Red PCB 30 × 44 mm</td></tr>
+<tr><td class="n">8</td><td>Female-female Dupont jumper wires</td><td>One used as a Y-splice for VCC + LED</td></tr>
+<tr><td class="n">2</td><td>M2.5 × 6 self-tapping screws</td><td>ESP32 to base</td></tr>
+<tr><td class="n">2</td><td>M2 × 6 screws</td><td>Screen retainer</td></tr>
+<tr><td class="n">4</td><td>M3 × 10 countersunk screws</td><td>Base to shell</td></tr>
+<tr><td class="n">4</td><td>10 mm rubber feet</td><td>Optional</td></tr>
+<tr><td class="n">1</td><td>Micro-USB data cable</td><td>Power and programming</td></tr>
+</table>
+
+<h2>Printed parts</h2>
+<table>
+<tr><th>Part</th><th>File</th><th>Orientation</th></tr>
+<tr><td>Shell</td><td><code>shell.stl</code></td><td>Standing on its open bottom edge</td></tr>
+<tr><td>Base</td><td><code>base.stl</code></td><td>Flat</td></tr>
+<tr><td>Screen bracket</td><td><code>screen_bracket.stl</code></td><td>Flat</td></tr>
+</table>
+<p>Recommended settings: PLA, 0.4 mm nozzle, 0.20 mm layers, 3 walls, 15 % gyroid infill, no supports, thick bridges on. All three parts fit on one plate: about 3 h and 79 g on a Bambu Lab A2L.</p>
+<div class="note"><strong>Optional supports.</strong> A few loose strands may stay inside the ceiling and on the screen hooks. They are hidden once assembled. For a cleaner inside, enable tree supports on build plate only.</div>
+
+<div class="page"></div>
+<h2>Wiring</h2>
+<img src="../images/11_wiring.png" style="width:92%">
+<table>
+<tr><th>LCD pin</th><th>ESP32 pin</th><th>Function</th></tr>
+<tr><td>VCC + LED</td><td>3V3</td><td>Power and backlight (Y-splice)</td></tr>
+<tr><td>GND</td><td>GND</td><td>Ground</td></tr>
+<tr><td>CS</td><td>GPIO21</td><td>Chip select</td></tr>
+<tr><td>RESET</td><td>GPIO4</td><td>Reset</td></tr>
+<tr><td>A0 / DC</td><td>GPIO22</td><td>Data / command</td></tr>
+<tr><td>SDA / MOSI</td><td>GPIO13</td><td>SPI data</td></tr>
+<tr><td>SCK</td><td>GPIO14</td><td>SPI clock</td></tr>
+</table>
+<div class="warn"><strong>3.3 V only.</strong> Never put 5 V on the GPIOs. MISO is not connected. Wire everything with the board unplugged.</div>
+
+<div class="page"></div>
+<h2>Assembly</h2>
+<img src="../images/07_exploded_view.png" style="width:82%">
+<p class="cap">Exploded view: shell, screen with retainer, ESP32 and base.</p>
+<ol class="steps">
+<li><strong>Wire the screen to the ESP32.</strong> Follow the wiring table. The ESP32 sits upside down in the case, so go by the pin labels printed on the board, not by their position.</li>
+<li><strong>Mount the ESP32 on the base</strong>, components facing down and pins facing up. At the antenna end, the two pegs go into the board's holes. At the USB end, fasten it with 2 M2.5 × 6 screws. The micro-USB port must face the open notch at the back of the base.</li>
+<li><strong>Mount the screen in the shell.</strong> From inside, slide the screen into its frame with the pin edge first, under the hooks. The screen's pins end up at the top. Place the retainer behind it and fasten it with 2 M2 × 6 screws.</li>
+<li><strong>Close the case.</strong> Fold the wires on top of the ESP32 and lower the shell onto the base, with the USB connector going through the slot at the back. Screw it from below with 4 M3 × 10 countersunk screws.</li>
+<li><strong>Finish.</strong> Stick the rubber feet on the base and plug in the USB cable from behind.</li>
+</ol>
+
+<div class="page"></div>
+<h2>Software notes</h2>
+<p>The MicroPython firmware and web panel shown in the photos are at <strong>github.com/lamaro/esp32-sci-fi-retro</strong>. The case also works with any other firmware that drives an ST7735S over SPI: Arduino (Adafruit ST7735, TFT_eSPI) or ESPHome.</p>
+<h3>Rotate the image</h3>
+<p>The screen is mounted with its pins at the top, so the image must be rotated 180° compared with the usual orientation.</p>
+<ul>
+<li><strong>Raw ST7735S driver:</strong> MADCTL <code>0x08</code>, with the 128×128 window offset by column 2, row 1.</li>
+<li><strong>Arduino libraries:</strong> use the rotation that flips the image 180° (for example <code>setRotation(2)</code>), and adjust the column/row offset if you see a stripe of noise on one edge.</li>
+</ul>
+<h3>SPI speed</h3>
+<p>20 MHz works with short Dupont wires. If you see glitches or wrong colors, lower the SPI clock.</p>
+
+<h2>Dimensions and fit</h2>
+<div class="two">
+  <div>
+    <img src="../images/12_dimensions.png">
+  </div>
+  <div>
+    <p>Outer size: 53 × 83 × 67 mm.</p>
+    <p>The base fits a 38-pin ESP32 DevKit with mounting holes 24 × 51 mm apart. Some clones differ.</p>
+    <p>If you're not sure about your board, print the base first (about 30 minutes) and test the fit. If needed, change <code>esp_hole_span</code> in <code>scifi_console.scad</code> and export the STL again with OpenSCAD.</p>
+    <h3>Troubleshooting</h3>
+    <ul>
+      <li><strong>White screen:</strong> check RESET, CS and DC wiring and the 3V3 supply.</li>
+      <li><strong>Upside-down image:</strong> see "Rotate the image" above.</li>
+      <li><strong>Noise on one edge:</strong> adjust the column/row offset.</li>
+      <li><strong>Shell doesn't close:</strong> fold the Dupont wires flat over the board.</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,9 +1,19 @@
-# Credenciales del Wi-Fi y token privado del dispositivo.
-/hello/wifi_secrets.py
+# Secretos: Wi-Fi y token de cada placa. Copiá el .example y completalo.
+wifi_secrets.py
+.env*
+!.env.example
+
+# Entorno de Python (uno solo en la raíz, compartido por todos los proyectos)
 .venv/
 __pycache__/
 *.pyc
+
+# Firmware de MicroPython descargado (se baja de micropython.org)
 *.bin
+
+# Fotos y videos originales del celular (pesados y con GPS)
+**/makerworld/originals/
+
+# Pruebas y renders sueltos
+scratch/
 .DS_Store
-.env*
-!.env.example

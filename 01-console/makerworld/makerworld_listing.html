@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MakerWorld Listing</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1d1d1b; --mute:#6b6b66; --line:#e2e0da; --acc:#e8590c; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#161615; --card:#1f1f1d; --ink:#ecebe6; --mute:#9a9890; --line:#34332f; --acc:#ff7a33; } }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system, system-ui, sans-serif; }
+  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .hint { color:var(--mute); margin:0 0 24px; }
+  section.field { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:0 0 16px; }
+  .label { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+  .label b { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--mute); }
+  button { font:inherit; font-size:13px; border:1px solid var(--acc); color:var(--acc); background:transparent; border-radius:6px; padding:4px 12px; cursor:pointer; }
+  button.done { background:var(--acc); color:#fff; }
+  .value { font-size:17px; font-weight:600; }
+  .tags span { display:inline-block; border:1px solid var(--line); border-radius:99px; padding:2px 10px; margin:0 6px 6px 0; font-size:13px; }
+  #desc h2 { font-size:19px; margin:22px 0 8px; } #desc h2:first-child { margin-top:0; }
+  #desc ul, #desc ol { padding-left:22px; } #desc li { margin:3px 0; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+<h1>MakerWorld listing: ESP32 Retro Sci-Fi Case</h1>
+<p class="hint">Each field has a copy button. The description is copied as formatted text, so headings and lists keep their style when pasted into the MakerWorld editor.</p>
+
+<section class="field">
+  <div class="label"><b>Model name</b><button data-copy="name">Copy</button></div>
+  <div class="value" id="name">ESP32 Retro Sci-Fi Case – Console for 1.44" ST7735 Screen</div>
+</section>
+
+<section class="field">
+  <div class="label"><b>Category</b></div>
+  <div class="value">Hobby &amp; DIY › Electronics</div>
+</section>
+
+<section class="field">
+  <div class="label"><b>Tags (42 of 50)</b><button data-copy="tags">Copy</button></div>
+  <div class="value" id="tags" style="font-weight:400;font-size:15px">esp32, esp32 case, esp32 enclosure, esp32 devkit, esp-wroom-32, st7735, st7735s, tft display, lcd case, 1.44 inch display, 128x128, spi display, micropython, arduino, esphome, iot, microcontroller, electronics enclosure, electronics case, project box, enclosure, case, sci-fi, scifi, retro, retro futuristic, cyberpunk, industrial, terminal, console, hacker, fatal error, desk gadget, desk toy, maker, diy, electronics, no supports, support free, single color, openscad, parametric</div>
+</section>
+
+<section class="field">
+  <div class="label"><b>Description</b><button data-copy="desc">Copy formatted</button></div>
+  <div id="desc">
+<h2>ESP32 Retro Sci-Fi Case</h2>
+<p>A small desk console for a 38-pin ESP32 DevKit and a 1.44" ST7735S SPI screen (128×128). It's styled as a retro-futuristic industrial terminal: 60° sloped panel, raised bolts, hazard stripes, a vent grille and rear fins.</p>
+<p>All the detail is in the relief, so it looks good in a single filament. For a worn look, dry-brush the edges with metallic gray and add a dark wash in the engravings.</p>
+
+<h2>Features</h2>
+<ul>
+<li>Compact: 53 × 83 × 67 mm.</li>
+<li>Prints without supports. The ceiling has 45° internal chamfers and the screen retainer sits on a solid ledge.</li>
+<li>The screen is screwed in from the inside with a retainer, centered in the window.</li>
+<li>The ESP32 is mounted upside down, pins facing up, so the Dupont wires have room above it.</li>
+<li>The micro-USB port is flush with the back, so you plug the cable in from outside.</li>
+<li>Parametric OpenSCAD source included, to adapt it to other boards.</li>
+</ul>
+
+<h2>What you need</h2>
+<ul>
+<li>1 × ESP32 DevKit, 38 pins (ESP-WROOM-32, PCB approx. 28 × 53 mm)</li>
+<li>1 × ST7735S SPI LCD, 1.44", 128×128, red PCB 30 × 44 mm</li>
+<li>8 × female-female Dupont jumper wires (one as a Y-splice for VCC + LED)</li>
+<li>2 × M2.5 × 6 self-tapping screws (ESP32)</li>
+<li>2 × M2 × 6 screws (screen retainer)</li>
+<li>4 × M3 × 10 countersunk screws (base to shell)</li>
+<li>4 × 10 mm rubber feet (optional)</li>
+</ul>
+
+<h2>Printing</h2>
+<ul>
+<li>Profile: Bambu Lab A2L, 0.4 mm nozzle, PLA, 0.20 mm layers.</li>
+<li>3 walls, 15 % gyroid infill.</li>
+<li>No supports, with thick bridges enabled.</li>
+<li>All three parts on one plate: about 3 h and 79 g.</li>
+<li>The shell stands on its open bottom edge. The base and the retainer lie flat.</li>
+</ul>
+<p><strong>Optional supports:</strong> the shell prints fine without supports, but a few loose strands may stay inside the ceiling (under the vent grille) and on the hooks that hold the screen. They are hidden once assembled and don't affect the fit. For a cleaner inside, enable tree supports on build plate only.</p>
+
+<h2>Wiring</h2>
+<ul>
+<li>VCC + LED → 3V3</li>
+<li>GND → GND</li>
+<li>CS → GPIO21</li>
+<li>RESET → GPIO4</li>
+<li>A0 / DC → GPIO22</li>
+<li>SDA / MOSI → GPIO13</li>
+<li>SCK → GPIO14</li>
+</ul>
+<p>MISO is not connected. Use 3.3 V only, never 5 V on the GPIOs. Wire everything with the board unplugged.</p>
+<p>The screen is mounted with its pins at the top, so you may need to rotate the image 180° in your driver. For the ST7735S that means MADCTL <code>0x08</code>, with the 128×128 window offset by column 2, row 1.</p>
+
+<h2>Assembly</h2>
+<ol>
+<li>Wire the screen and the ESP32 following the diagram. The ESP32 sits upside down in the case, so go by the pin labels, not by their position.</li>
+<li>Place the ESP32 on the base, components facing down. The pegs go into the holes at the antenna end. Fasten the USB end with 2 M2.5 screws.</li>
+<li>Fit the screen into its frame from inside the shell, pin edge first, under the hooks. Secure it with the retainer and 2 M2 screws.</li>
+<li>Lower the shell onto the base, with the USB connector going through the slot at the back. Screw it from below with 4 countersunk M3 screws.</li>
+<li>Stick on the rubber feet.</li>
+</ol>
+<p>The full step-by-step guide with pictures is in the documentation PDF.</p>
+
+<h2>About the screen content</h2>
+<p>The photos and video show my own MicroPython firmware with several screen modes: a scrolling Python console, a hacker terminal, a fatal error alarm, a status screen and animations. It also includes a local web panel to switch modes over Wi-Fi.</p>
+<p><strong>Firmware, web panel and source files on GitHub:</strong> <a href="https://github.com/lamaro/esp32-sci-fi-retro">github.com/lamaro/esp32-sci-fi-retro</a></p>
+<p>The case also works with any other firmware that drives an ST7735S over SPI (Arduino, ESPHome).</p>
+
+<h2>Before you print</h2>
+<p>The design fits a 38-pin ESP32 DevKit with mounting holes 24 × 51 mm apart. Some clones differ. If you're not sure, print the base first (about 30 minutes) and test it. If needed, change <code>esp_hole_span</code> in the included <code>.scad</code> file.</p>
+  </div>
+</section>
+</main>
+<script>
+document.querySelectorAll('button[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const el = document.getElementById(b.dataset.copy);
+  let ok = false;
+  if (b.dataset.copy === 'tags') {
+    const t = el.textContent.trim();
+    const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
+    try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+  } else {
+    const r = document.createRange(); r.selectNodeContents(el);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    try { ok = document.execCommand('copy'); } catch (e) {} s.removeAllRanges();
+  }
+  b.textContent = ok ? 'Copied' : 'Select and copy manually'; b.classList.toggle('done', ok);
+  setTimeout(() => { b.textContent = b.dataset.copy === 'desc' ? 'Copy formatted' : 'Copy'; b.classList.remove('done'); }, 1800);
+}));
+</script>
+</body>
+</html>

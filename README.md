@@ -1,168 +1,45 @@
-# ESP32 Retro Sci-Fi Console
+# ESP32 Retro Sci-Fi Modules
 
-A small desk console built from an ESP32 DevKit and a 1.44" ST7735S screen. It has a 3D-printed retro-futuristic case, MicroPython firmware with animated screen modes, and a local Next.js panel to control it over Wi-Fi.
-
-<p align="center">
-  <img src="docs/images/demo.gif" width="300" alt="The console switching between the Python console and the hacker terminal">
-</p>
+A growing set of small desk modules built around an ESP32 and a 1.44" ST7735S screen, each with a 3D-printed retro-futuristic case. They share the same style, so side by side they read as one retro sci-fi control panel.
 
 <p align="center">
-  <img src="docs/images/01_photo_front.png" width="32%" alt="Front view with the hacker terminal">
-  <img src="docs/images/02_photo_fatal_error.png" width="32%" alt="Fatal error alarm">
-  <img src="docs/images/03_photo_hacker_terminal.png" width="32%" alt="Side view">
+  <img src="01-console/docs/demo.gif" width="260" alt="The console module switching screens">
 </p>
 
-> Guía completa en español: [GUIA.md](GUIA.md) · Comandos rápidos: [CHEATSHEET.md](CHEATSHEET.md)
+## Modules
 
-## Contents
+| # | Module | Status | What it is |
+|---|---|---|---|
+| 01 | [Console](01-console) | Published on MakerWorld | Wedge console with the screen on a 60° panel. Animated screen modes, Wi-Fi API |
+| 02 | [Holo](02-holo) | In progress | Same wedge, wider. The screen is reflected on a tilted clear sheet (Pepper's ghost), so the image floats inside the case |
 
-| Folder | What's inside |
-|---|---|
-| [`case/`](case) | 3D-printable case: Bambu Studio project, STL files, parametric OpenSCAD source and the [assembly guide (PDF)](case/assembly_guide.pdf) |
-| [`hello/`](hello) | MicroPython firmware for the ESP32: display driver, screen modes, Wi-Fi API and USB demos |
-| [`panel/`](panel) | Next.js web panel that sends commands to the board on your local network |
-| [`docs/images/`](docs/images) | Photos, renders and diagrams |
+## Repository layout
 
-![Architecture](arquitectura.svg)
+Every module has the same folders:
 
-## Screen modes
+```
+NN-module/
+├── README.md     what it is, wiring, how to build it
+├── firmware/     MicroPython code for the ESP32
+├── case/         source/ (OpenSCAD), stl/, Bambu Studio 3MF, reference models
+├── makerworld/   listing package: covers, images, video, documentation, description
+└── docs/         diagrams and images used by the README
+```
 
-| Mode | Description |
-|---|---|
-| `status` | Online and Wi-Fi state, plus the board's local IP |
-| `console` | Green terminal that types and scrolls real fragments of the firmware's own Python code |
-| `hacker` | Hacker-movie terminal: commands, progress bars, hex dumps and alerts |
-| `fatal` | Blinking red "FATAL ERROR" alarm with hazard stripes |
-| `sunset` | Pixel-art sunset |
-| `colors` | RGB565 color grid to check colors and edges |
-| `animation` | Bouncing orb with trail and shadow |
-| `text` | Your own message, up to two lines of 15 characters |
-| `random` | Switches to a different scene every 20 seconds |
+## Web control panel
 
-The driver draws in 8-row strips through a 2 KB buffer and only redraws what changed, so the animations run at about 15–23 fps on the ESP32.
+The Next.js panel that controls the modules over Wi-Fi lives in its own repository: [esp32-sci-fi-retro-panel](https://github.com/lamaro/esp32-sci-fi-retro-panel). Its README walks through flashing a board and connecting it to the panel.
 
-## Hardware
+## Tooling
 
-- ESP32 DevKit, 38 pins (ESP-WROOM-32, CP2102 USB serial)
-- ST7735S SPI LCD, 1.44", 128×128 (red PCB, 30 × 44 mm)
-- 8 female-female Dupont wires, micro-USB data cable
-- For the case: 2 × M2.5 × 6 self-tapping screws, 2 × M2 × 6 screws, 4 × M3 × 10 countersunk screws, optional rubber feet
-
-### Wiring
-
-| LCD | ESP32 |
-|---|---|
-| VCC + LED | 3V3 |
-| GND | GND |
-| CS | GPIO21 |
-| RESET | GPIO4 |
-| A0 / DC | GPIO22 |
-| SDA / MOSI | GPIO13 |
-| SCK | GPIO14 |
-
-MISO is not connected. Use 3.3 V only. Connect by GPIO label, not by physical position.
-
-![Wiring diagram](docs/images/11_wiring.png)
-
-## Quick start
-
-### 1. Flash and load the firmware
-
-Requires Python 3. From `hello/`:
+One Python environment at the root serves every module:
 
 ```sh
-cd hello
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install esptool mpremote
-mpremote connect list
-PORT=/dev/cu.usbserial-0001   # your board's serial port
 ```
 
-If the board doesn't have MicroPython yet, download the [ESP32_GENERIC](https://micropython.org/download/ESP32_GENERIC/) firmware as `firmware.bin` and flash it. This erases the board.
+The cases are parametric OpenSCAD models. Export a part with `openscad --backend=manifold -o part.stl -D 'part="shell"' case/source/<model>.scad`.
 
-```sh
-python -m esptool --chip esp32 --port "$PORT" erase-flash
-python -m esptool --chip esp32 --port "$PORT" write-flash 0x1000 firmware.bin
-```
-
-Create your secrets file and generate a token:
-
-```sh
-cp wifi_secrets.py.example wifi_secrets.py
-python -c 'import secrets; print(secrets.token_hex(32))'
-```
-
-Fill in `WIFI_SSID`, `WIFI_PASSWORD` and `API_TOKEN` in `wifi_secrets.py`, then copy the files and reset:
-
-```sh
-mpremote connect "$PORT" fs cp wifi_secrets.py :wifi_secrets.py &&
-mpremote connect "$PORT" fs cp font5x7.py :font5x7.py &&
-mpremote connect "$PORT" fs cp display_ui.py :display_ui.py &&
-mpremote connect "$PORT" fs cp main.py :main.py &&
-mpremote connect "$PORT" reset
-```
-
-The screen shows the board's IP when it boots.
-
-### 2. Run the panel
-
-Requires Node.js 22 or later. From `panel/`:
-
-```sh
-cd panel
-npm ci
-cp .env.example .env.local
-```
-
-Set `ESP32_BASE_URL` to the board's IP and `ESP32_API_TOKEN` to the same token, then run:
-
-```sh
-npm run dev -- --hostname 127.0.0.1
-```
-
-Open http://localhost:3000 and pick a mode.
-
-The panel talks to the board over plain HTTP on your LAN, and the token is sent from the Next.js server. Keep the panel on localhost, don't open ports on your router, and never commit `.env.local` or `wifi_secrets.py`.
-
-## The case
-
-<p align="center">
-  <img src="docs/images/07_exploded_view.png" width="49%" alt="Exploded view">
-  <img src="docs/images/09_printed_parts.png" width="49%" alt="Printed parts">
-</p>
-
-- Outer size 53 × 83 × 67 mm, single color, prints without supports.
-- The ESP32 is mounted upside down so the Dupont wires have room. The micro-USB port is flush with the back.
-- The screen is mounted with its pins at the top, so the firmware rotates the image 180° (MADCTL `0x08`, window offset column 2, row 1).
-
-| File | Use |
-|---|---|
-| [`case/esp32_scifi_console.3mf`](case/esp32_scifi_console.3mf) | Bambu Studio project: shell, base and screen bracket on one plate (A2L, PLA, 0.20 mm, about 3 h and 79 g) |
-| [`case/stl/`](case/stl) | The three parts as separate STL files |
-| [`case/reference/`](case/reference) | ESP32 and screen models, for reference only |
-| [`case/source/`](case/source) | Parametric OpenSCAD model, render scenes and wiring diagram |
-| [`case/assembly_guide.pdf`](case/assembly_guide.pdf) | Bill of materials, wiring and step-by-step assembly |
-
-Some ESP32 clones have different hole spacing. Print the base first (about 30 minutes) to check the fit, and adjust `esp_hole_span` in `case/source/scifi_console.scad` if needed.
-
-## USB demos
-
-From `hello/`, with the serial monitor closed:
-
-```sh
-mpremote connect "$PORT" run demo_pantalla.py    # pixel-art sunset
-mpremote connect "$PORT" run demo_colores.py     # color grid
-mpremote connect "$PORT" run demo_animacion.py   # bouncing orb
-```
-
-Press **EN** or run `mpremote connect "$PORT" reset` to go back to the Wi-Fi API.
-
-## Troubleshooting
-
-The full table is in [GUIA.md](GUIA.md#solución-de-problemas) (Spanish). The most common issues:
-
-- **No serial port:** use a data cable and check the [CP210x driver](https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers).
-- **White screen while the API responds:** check VCC/GND and the SPI wires by label, then run `demo_pantalla.py`.
-- **Glitches or wrong colors:** lower `SPI_BAUD` in `display_ui.py`.
-- **Panel disconnected:** the board's IP may have changed. Update `panel/.env.local` and restart Next.js.
+Secrets (`wifi_secrets.py`, `.env.local`), the MicroPython `.bin` and the original phone photos in `makerworld/originals/` are ignored by Git.
