@@ -1,6 +1,7 @@
-"""Clima actual de una ciudad, desde Open-Meteo (pública, sin clave).
+"""Clima actual y pronóstico de 3 días de una ciudad, desde Open-Meteo (pública, sin clave).
 
-Solo se consulta mientras la escena de clima está en pantalla: la pantalla
+Una sola consulta trae las dos escenas (clima y pronóstico). Solo se consulta
+mientras una de ellas está en pantalla: la pantalla
 llama a fetch() cuando due() indica que los datos vencieron.
 """
 import gc
@@ -24,7 +25,15 @@ NAME_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .-'"
 URL = ("http://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f"
        "&current=temperature_2m,relative_humidity_2m,apparent_temperature,"
        "weather_code,is_day"
-       "&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1")
+       "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"
+       "&timezone=auto&forecast_days=4")
+DAYS = ("LUN", "MAR", "MIE", "JUE", "VIE", "SAB", "DOM")
+
+
+def weekday(date):
+    """Día de la semana (0 = lunes) de una fecha "AAAA-MM-DD"."""
+    y, m, d = int(date[:4]), int(date[5:7]), int(date[8:10])
+    return time.localtime(time.mktime((y, m, d, 12, 0, 0, 0, 0)))[6]
 
 # Códigos WMO -> (tipo de ícono, texto de hasta 21 caracteres)
 def describe(code):
@@ -121,6 +130,13 @@ class Weather:
                 # probabilidad máxima de precipitación del día (puede faltar)
                 "rain": day["precipitation_probability_max"][0],
                 "time": now["time"][11:16],
+                # los 3 días siguientes: (día de la semana, día del mes, código, máx, mín, lluvia)
+                "days": [
+                    (DAYS[weekday(day["time"][i])], int(day["time"][i][8:10]), int(day["weather_code"][i]),
+                     int(round(day["temperature_2m_max"][i])), int(round(day["temperature_2m_min"][i])),
+                     day["precipitation_probability_max"][i])
+                    for i in range(1, 4)
+                ],
             }
             self.error = False
             self.next_ms = time.ticks_add(time.ticks_ms(), REFRESH_MS)

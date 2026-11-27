@@ -34,6 +34,7 @@ A small desk console built from an ESP32 DevKit and a 1.44" ST7735S screen. It h
 | `hacker` | Hacker-movie terminal: commands, progress bars, hex dumps and alerts |
 | `fatal` | Blinking red "FATAL ERROR" alarm with hazard stripes |
 | `weather` | Current weather and today's chance of rain for a city (default Buenos Aires) from [Open-Meteo](https://open-meteo.com), a free public API with no key. The board only queries it while this scene is on screen, at most every 15 minutes |
+| `forecast` | The next three days for the same city: day, icon, high, low and chance of rain. It shares the weather query, so it is fetched under the same rules |
 | `sunset` | Pixel-art sunset |
 | `colors` | RGB565 color grid to check colors and edges |
 | `animation` | Bouncing orb with trail and shadow |

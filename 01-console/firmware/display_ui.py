@@ -28,8 +28,9 @@ X_OFF = 2
 Y_OFF = 1
 SPI_BAUD = 20000000
 
-MODES = ("status", "sunset", "colors", "animation", "text", "console", "hacker", "fatal", "weather", "random")
-RANDOM_POOL = ("status", "sunset", "colors", "animation", "console", "hacker", "fatal", "weather")
+MODES = ("status", "sunset", "colors", "animation", "text", "console", "hacker", "fatal", "weather", "forecast", "random")
+RANDOM_POOL = ("status", "sunset", "colors", "animation", "console", "hacker", "fatal", "weather", "forecast")
+WEATHER_VIEWS = ("weather", "forecast")     # escenas que usan la consulta de clima
 RANDOM_MS = 20000
 ANIM_MS = 20            # objetivo: hasta 50 cuadros por segundo
 
@@ -103,6 +104,7 @@ class Display:
         self.t_wx_dim = glyph_table(TEAL, NAVY)
         self.t_wx_head = glyph_table(NAVY, TEAL)
         self.t_wx_warn = glyph_table(ORANGE, NAVY)
+        self.t_wx_rain = glyph_table(SKY, NAVY)
         self.weather = Weather()
         self.spi = machine.SPI(1, baudrate=SPI_BAUD, polarity=0, phase=0,
                                sck=machine.Pin(14), mosi=machine.Pin(13), miso=machine.Pin(12))
@@ -512,6 +514,68 @@ class Display:
         else:
             self.text57(4, 117, "ACTUALIZADO " + d["time"], self.t_wx_dim)
 
+    def small_icon(self, kind, cx, cy):
+        """Ícono de unos 26 x 20 px centrado en (cx, cy), para el pronóstico."""
+        if kind == "clear":
+            self.sun(cx, cy, 6)
+            return
+        if kind == "fog":
+            for i, w in enumerate((20, 24, 18)):
+                self.rect(cx - w // 2, cy - 6 + i * 5, w, 2, GRAY)
+            return
+        if kind == "partly":
+            self.sun(cx + 4, cy - 4, 5)
+        color = SLATE if kind == "storm" else GRAY if kind == "rain" else LIGHT if kind != "partly" else WHITE
+        # nube chica: 24 x 12 px con el borde inferior en cy + 6
+        self.circle(cx - 6, cy + 2, 4, color)
+        self.circle(cx + 1, cy - 1, 6, color)
+        self.circle(cx + 7, cy + 2, 4, color)
+        self.rect(cx - 10, cy + 2, 21, 5, color)
+        if kind == "rain":
+            for x in (cx - 6, cx, cx + 6):
+                self.rect(x, cy + 9, 2, 3, SKY)
+        elif kind == "snow":
+            for x in (cx - 6, cx, cx + 6):
+                self.rect(x - 1, cy + 10, 3, 1, WHITE)
+                self.rect(x, cy + 9, 1, 3, WHITE)
+        elif kind == "storm":
+            for x, y in ((1, 8), (-1, 10), (1, 12)):
+                self.rect(cx + x, cy + y, 3, 2, YELLOW)
+
+    def draw_forecast(self):
+        w = self.weather
+        d = w.data
+        self.rect(0, 0, WIDTH, HEIGHT, NAVY)
+        self.rect(0, 0, WIDTH, 11, TEAL)
+        name = w.city["name"][:21]
+        self.text57((WIDTH - len(name) * 6) // 2, 2, name, self.t_wx_head)
+        if d is None or not d.get("days"):
+            self.cloud(47, 58, GRAY)
+            msg = "SIN CONEXION" if w.error else "CARGANDO..."
+            self.text57((WIDTH - len(msg) * 6) // 2, 72, msg, self.t_wx_warn if w.error else self.t_wx_dim)
+            return
+        # Tres columnas de 42 px separadas por una línea teal: 42 + 1 + 42 + 1 + 42 = 128.
+        for i, (wd, dom, code, hi, lo, rain) in enumerate(d["days"][:3]):
+            x0 = i * 43
+            cx = x0 + 21
+            if i:
+                self.rect(x0 - 1, 15, 1, 92, SLATE)
+            label = "%s %d" % (wd, dom)
+            self.text57(cx - (len(label) * 6 - 1) // 2, 16, label, self.t_wx)
+            self.small_icon(describe(code)[0], cx, 38)
+            temp = "%d°" % hi
+            self.text(cx - (len(temp) * 8 - 2) // 2, 56, temp, WHITE, 2)
+            low = "%d" % lo
+            self.text57(cx - (len(low) * 6 - 1) // 2, 71, low, self.t_wx_dim)
+            pct = "--" if rain is None else "%d%%" % rain
+            left = cx - (len(pct) * 6 + 3) // 2
+            self.rect(left + 1, 86, 1, 2, SKY)          # gota
+            self.rect(left, 88, 3, 3, SKY)
+            self.text57(left + 5, 85, pct, self.t_wx_rain)
+        self.rect(6, 106, WIDTH - 12, 1, TEAL)
+        self.text57(4, 114, "PRONOSTICO", self.t_wx_dim)
+        self.text57(WIDTH - 4 - 5 * 6 + 1, 114, d["time"], self.t_wx_warn if w.error else self.t_wx_dim)
+
     def draw(self, view):
         if view == "status":
             self.draw_status()
@@ -527,6 +591,8 @@ class Display:
             self.draw_fatal()
         elif view == "weather":
             self.draw_weather()
+        elif view == "forecast":
+            self.draw_forecast()
         else:
             self.draw_animation()
 
@@ -550,7 +616,7 @@ class Display:
                 if dt < 450:
                     return
                 self.blink = not self.blink
-            elif view == "weather":
+            elif view in WEATHER_VIEWS:
                 # Se consulta la API solo con esta escena en pantalla, y después
                 # de dibujar "CARGANDO" para no demorar la respuesta al panel.
                 if not self.weather.due(now):

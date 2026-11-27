@@ -131,7 +131,7 @@ def serve_client(client):
             ):
                 send_json(client, 400, {"error": "invalid_display_text"})
                 return False
-        if mode == "weather" and "city" in command:
+        if mode in ("weather", "forecast") and "city" in command:
             city = valid_city(command["city"])
             if city is None:
                 send_json(client, 400, {"error": "invalid_city"})
