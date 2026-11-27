@@ -109,7 +109,7 @@ def serve_client(client):
 
     if method == "GET" and path == "/api/status":
         uptime = time.ticks_diff(time.ticks_ms(), started_at) // 1000
-        send_json(client, 200, {"online": True, "led": bool(led.value()), "uptime": uptime, "ip": ip_address, "display": display.mode, "scene": display.current(), "textSupported": True, "weatherCity": display.weather.city["name"]})
+        send_json(client, 200, {"online": True, "led": bool(led.value()), "uptime": uptime, "ip": ip_address, "display": display.mode, "scene": display.current(), "textSupported": True, "weatherCity": display.weather.city["name"], "weather": display.weather.data})
         return False
 
     if method == "POST" and path == "/api/display":
